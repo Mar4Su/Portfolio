@@ -1,0 +1,56 @@
+[
+  {
+    "id": "project-1",
+    "name": "Monopoly Mongolia",
+    "category": "Web game",
+    "image": "images/portfolio/terbumtan.png",
+    "description": "Monopoly Mongolia is a web-based adaptation of the classic Monopoly board game, uniquely tailored to reflect Mongolian cities, culture, and landmarks. Designed to be fun and educational, the game allows players to buy, trade, and develop properties across Mongolia while managing their finances strategically. Whether you're learning about Mongolian geography or simply enjoying a competitive game with friends online, Monopoly Mongolia offers an engaging and culturally rich experience. It is fully playable in the browser and accessible to anyone interested in combining strategy with a local twist on a global classic.",
+    "url": "https://www.richup.io/",
+    "featured": true
+  },
+  {
+    "id": "project-2",
+    "name": "Mafia the Game",
+    "category": "Web Game",
+    "image": "images/portfolio/mafia.jpg",
+    "description": "Mafia is a web-based social deduction game where players take on hidden roles as members of the Mafia, Villagers, or special characters. The goal is simple: survive, deceive, and uncover the truth. I built this version of Mafia to bring the classic party game online, allowing friends to play together from anywhere through a smooth and interactive interface. With features like real-time chat, role assignments, and vote-based decision-making, the game captures the suspense and excitement of the original—now in a digital format.",
+    "url": "https://mafia.marasu.me/",
+    "featured": true
+  },
+  {
+    "id": "project-3",
+    "name": "World Air Quality Index",
+    "category": "Website",
+    "image": "images/portfolio/aqi.png",
+    "description": "World Air Quality Index is a web application that provides real-time data on air pollution levels from cities across the globe. It fetches and displays key air quality indicators such as PM2.5, PM10, CO, NO₂, and AQI (Air Quality Index) in an easy-to-read format. The app aims to raise awareness about environmental health by allowing users to track pollution trends in their own city or compare air quality worldwide. Built with user-friendly design and live data integration, this project makes environmental information accessible to everyone.",
+    "url": "https://webprojectaqm.onrender.com/",
+    "featured": true
+  },
+  {
+    "id": "project-4",
+    "name": "Number Plate Recognition",
+    "category": "Android Application",
+    "image": "images/portfolio/npr.jpg",
+    "description": "Number Plate Recognition is an Android application built using Kotlin and machine learning technology to detect and read vehicle number plates from images. By simply taking a photo of a car’s license plate, the app automatically recognizes the plate number and retrieves detailed information about the vehicle and its owner from a connected database. This system streamlines vehicle identification for purposes like parking management, security checks, or law enforcement. Designed for efficiency and accuracy, the app demonstrates the practical use of ML in real-world mobile applications.",
+    "url": "",
+    "featured": true
+  },
+  {
+    "id": "project-5",
+    "name": "Masked Trip",
+    "category": "Content",
+    "image": "images/portfolio/masked.jpg",
+    "description": "Masked Trip Vlog is a travel video series created to explore hidden gems and cultural highlights across Mongolia, with a unique twist—each episode features a masked host to keep the focus on the journey rather than the individual. Sponsored by the Mongolian Youth Union, the project aims to inspire young people to discover the beauty of their country while promoting adventure, culture, and local tourism. We’ve released several episodes showcasing different destinations, blending storytelling, visuals, and a touch of mystery to engage viewers.",
+    "url": "https://youtu.be/IuuOAug6XuQ",
+    "featured": true
+  },
+  {
+    "id": "project-6",
+    "name": "GoodRecipes",
+    "category": "Website",
+    "image": "images/portfolio/recipe.jpg",
+    "description": "GoodRecipe is a personal recipe website currently in development, designed to store and organize recipes I use in everyday cooking. The platform automatically calculates nutritional information and estimated food costs for each recipe, making it easier to plan meals efficiently. While it currently serves as a personal cooking assistant, the long-term vision is to grow it into a social recipe-sharing platform where anyone can upload, browse, and interact with recipes—similar to how Instagram or Facebook connects people, but focused on food. GoodRecipe aims to make cooking more fun, informed, and community-driven.",
+    "url": "",
+    "featured": true
+  }
+]

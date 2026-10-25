@@ -18,7 +18,7 @@
         opacity: 0,
         duration: 1000,
         begin: function(anim) {
-            window.scrollTo(0, 0);
+            if (!window.location.hash) window.scrollTo(0, 0);
         }
     })
     .add({
@@ -27,6 +27,8 @@
         complete: function(anim) {
             document.querySelector("#preloader").style.visibility = "hidden";
             document.querySelector("#preloader").style.display = "none";
+            const anchor = document.getElementById(window.location.hash.slice(1));
+            if (anchor) anchor.scrollIntoView();
         }
     })
     .add({
@@ -209,7 +211,7 @@
     * ------------------------------------------------------ */ 
     const ssSwiper = function() {
 
-        const mySwiper = new Swiper('.swiper-container', {
+        const mySwiper = new Swiper('.testimonial-slider', {
 
             slidesPerView: 1,
             pagination: {

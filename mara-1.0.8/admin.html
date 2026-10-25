@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Project studio — Mara</title><link rel="stylesheet" href="css/vendor.css"><link rel="stylesheet" href="css/styles.css"><link rel="stylesheet" href="css/projects.css"></head>
+<body><main class="admin-page">
+<div class="admin-top"><div><p class="text-pretitle">Mara / Private studio</p><h1>Your projects<span class="accent">.</span></h1></div><button id="logout" hidden>Sign out</button></div>
+<p id="notice" class="admin-notice" role="status" aria-live="polite"></p>
+<form id="login" class="admin-panel"><h2>Welcome back.</h2><p>Enter your password to manage your portfolio.</p><label for="password">Password</label><input type="password" id="password" autocomplete="current-password" required><button type="submit">Sign in →</button></form>
+<div id="studio" hidden><p>All projects appear in your collection. Choose up to six to preview on the home page.</p><div class="admin-layout">
+<form id="editor" class="admin-panel"><h2 id="editor-title">Add a project</h2><input id="project-id" type="hidden">
+<label for="name">Project name</label><input id="name" maxlength="160" required>
+<label for="category">Category</label><input id="category" maxlength="100" placeholder="Website, app, game…" required>
+<label for="description">About the project</label><textarea id="description" maxlength="10000" required></textarea>
+<label for="url">Project link (optional)</label><input id="url" type="url" placeholder="https://" maxlength="2048">
+<label for="photo">Project photo · PNG, JPEG, WebP · up to 5 MB</label><input id="photo" type="file" accept="image/png,image/jpeg,image/webp"><img id="photo-preview" class="photo-preview" alt="Project photo preview" hidden>
+<label class="feature-switch"><input id="featured" type="checkbox" role="switch"><span>Preview on index</span></label>
+<button type="submit" id="save">Save project →</button><button type="button" id="cancel">Clear</button></form>
+<section class="admin-panel"><h2>Project library</h2><p id="count"></p><div id="library"></div></section>
+</div></div></main><script src="js/admin.js"></script></body></html>
