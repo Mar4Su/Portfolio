@@ -2856,6 +2856,7 @@ img.u-pull-left {
 .s-pagewrap .circles,
 .s-pagewrap .circles span {
     position : absolute;
+    pointer-events : none;
 }
 
 .s-pagewrap .circles {

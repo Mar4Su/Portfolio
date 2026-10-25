@@ -1,47 +1,94 @@
 # Mara portfolio
 
-The public site lives in `mara-1.0.8`. A small Node server stores projects and uploaded photos on disk. Run this server to use the admin editor; static-only hosting cannot save admin changes.
+Personal portfolio for **marasu.tech**, with a private project editor at **admin.marasu.tech**.
 
-## Run locally
+## Repository layout
 
-Install Node.js 22 or later. Copy `.env.example` to `.env`, set a unique `ADMIN_PASSWORD` of at least 16 characters, and use these local settings:
+- `public/` — public pages, CSS, JavaScript, and the images the site uses.
+- `admin/` — private editor frontend, deployed to a separate Hosting site.
+- `functions/` — Firebase HTTP API, Firestore/Storage adapter, and the original project seed.
+- `scripts/` — isolated Hosting builds, deployment checks, and local file storage.
+- `test/` — backend integration and shared project validation tests.
+- `assets/originals/` — original photos and project screenshots, excluded from deployment.
+- `dist/` — generated Hosting outputs, excluded from Git.
+- `data/` — local preview data and uploads, excluded from Git.
 
-```dotenv
-PORT=3000
-PUBLIC_ORIGIN=http://localhost:3000
-ADMIN_ORIGIN=http://localhost:3000
-COOKIE_SECURE=false
+## Local preview
+
+Use Node.js 22 or later. Copy `.env.example` to `.env` and set a unique password of at least 8 characters. The placeholder password is deliberately rejected. A configured local `.env` may already exist from deployment setup; do not overwrite it unless you intend to change your local login.
+
+```sh
+npm ci
+npm start
 ```
 
-Run `npm start`. Open `http://localhost:3000` for the portfolio and `http://localhost:3000/admin.html` for the editor. No dependency installation is needed. Run `npm test` for the server integration checks.
+Open `http://localhost:3000` and `http://localhost:3000/admin.html`. If that port is busy, change `PORT`, `PUBLIC_ORIGIN`, and `ADMIN_ORIGIN` together in `.env`. Local preview uses disk storage and does not modify Firebase data.
 
-## Deploy marasu.tech and admin.marasu.tech
-
-Use a host that runs a persistent Node process with persistent disk (a VPS or a Node hosting service with a mounted disk). Configure:
-
-```dotenv
-ADMIN_PASSWORD=your-long-unique-secret
-PUBLIC_ORIGIN=https://marasu.tech
-ADMIN_ORIGIN=https://admin.marasu.tech
-COOKIE_SECURE=true
-PORT=3000
-DATA_DIR=/var/lib/marasu
+```sh
+npm ci --prefix functions
+npm run check
+npm test
+npm audit --prefix functions --omit=dev
 ```
 
-Point DNS for both domains to the host. Send both domains through an HTTPS reverse proxy to this Node process. For example, Caddy provisions HTTPS with:
+`check` validates JavaScript, links, seed images, password examples, and the separation between Hosting sites, then creates `dist/public` and `dist/admin`.
 
-```caddyfile
-marasu.tech, admin.marasu.tech {
-    reverse_proxy 127.0.0.1:3000
-}
+## Firebase deployment
+
+Project: `portfolio-marasu`. Public Hosting site: `portfolio-marasu`. Admin Hosting site: `portfolio-marasu-admin`. Region: `asia-east1` for Cloud Functions, Firestore, and photo storage.
+
+The full editor requires the Blaze plan for Cloud Functions and Cloud Storage. The API uses Firestore transactions to enforce the six-featured-project limit across instances. Photos live in the private bucket `portfolio-marasu.firebasestorage.app` and are served through the API. Direct Firestore and Storage client access is denied by security rules. Secrets and source files are excluded from both Hosting builds.
+
+On a new machine, install the Firebase CLI, sign in, then install the locked dependencies:
+
+```sh
+npm install -g firebase-tools
+firebase login
+npm ci
+npm ci --prefix functions
 ```
 
-If your platform connects to a network port rather than a local reverse proxy, set `HOST=0.0.0.0`. Set `PORT` to the platform's assigned port. Preserve the original Host header so the app recognizes the admin domain.
+The initial setup creates a Firestore `(default)` database, the default Cloud Storage bucket, the second Hosting site, and the `ADMIN_PASSWORD` Secret Manager secret. These resources only need to be created once. For password rotation, use the command below, enter a unique password of at least 8 characters, and redeploy the function:
 
-Start the app with `npm start` under your process manager. Visit `https://admin.marasu.tech` and enter the password. There is no public admin navigation link. Admin routes are unavailable on the public hostname. Authentication uses an eight-hour, host-only HttpOnly session cookie; restarting the server signs everyone out. Login attempts are throttled. Changing `ADMIN_PASSWORD` and restarting rotates access.
+```sh
+firebase functions:secrets:set ADMIN_PASSWORD --project portfolio-marasu
+firebase deploy --only functions --project portfolio-marasu
+```
 
-The editor supports adding, editing, deleting, photo uploads (PNG/JPEG/WebP up to 5 MB), and a **Preview on index** switch on each project. Up to six can be enabled; disable one before featuring another. Every saved project appears on `projects.html` regardless of its preview switch.
+The production password is a Secret Manager secret, not a frontend variable. Rotating it invalidates old sessions. The generated initial password is also saved in the ignored local `.env`; changing that file alone changes only your local preview password.
 
-Back up the entire `DATA_DIR` including `projects.json` and `uploads/`. This directory must survive redeploys and be writable by the Node process. Run one server instance against it; this file store is not intended for multiple replicas. Original project content seeds the database only on first launch. Public pages can show the original seeded projects on a static preview when the API is unavailable.
+Production origins and the bucket are defined in `functions/index.js`. If needed, copy `functions/.env.example` to `functions/.env.portfolio-marasu` to override them. Keep all `.env` files out of Git.
 
-The DNS, HTTPS hosting, persistent disk, and production password must be configured before the live admin subdomain works.
+Deploy everything:
+
+```sh
+npm run deploy
+```
+
+For subsequent frontend-only changes, after the API has been deployed:
+
+```sh
+npm run deploy:hosting
+```
+
+Hosting rewrites `/api/**` and `/uploads/**` to `portfolioApi`. The `__session` cookie name is required because Firebase Hosting strips other cookies before forwarding to functions. Cookies are Secure, HttpOnly, SameSite=Strict, and host-only. Sessions last eight hours and are persisted in Firestore. Expired session and login-attempt records use TTL cleanup; authentication also checks expiry itself. Login limits persist across instances. No public menu links to the admin site. The login UI itself is public; every editing operation requires a valid session.
+
+Cloud Functions is limited to three instances with zero warm instances. Set a billing budget alert in Google Cloud; instance limits do not impose a total spending cap. Keep backups of Firestore and the photo bucket as appropriate. Redeploying never overwrites saved projects: the six original projects are seeded only when the project store is first initialized.
+
+## Custom domains
+
+In Firebase Console → Hosting, connect `marasu.tech` to `portfolio-marasu` and `admin.marasu.tech` to `portfolio-marasu-admin`. Add exactly the DNS records Firebase shows at your DNS provider. Remove conflicting A/AAAA/CNAME records only for those hostnames. Firebase provisions HTTPS after verification.
+
+Admin mutations accept the configured admin origin, `https://admin.marasu.tech`, and the two Firebase-generated URLs for this specific admin site. You can sign in at `https://portfolio-marasu-admin.web.app` while custom-domain DNS is being configured. Each hostname has its own host-only session cookie.
+
+## GitHub
+
+Commit the source, Firebase rules/config, and both package lockfiles. `.env`, local data, uploaded preview photos, dependencies, logs, and generated builds are ignored. Never commit service-account keys. Deployment uses your Firebase CLI sign-in; no GitHub secret is required. The GitHub workflow runs checks and tests on pushes and pull requests, and does not deploy automatically.
+
+```sh
+git add .
+git commit -m "Prepare portfolio and admin editor for Firebase"
+git push origin main
+```
+
+Review `git diff --cached --stat` before committing. Original project images retain their existing provenance; template/vendor notices remain in the CSS and JavaScript files.

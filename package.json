@@ -1,1 +1,15 @@
-{"name":"marasu-portfolio","private":true,"type":"module","scripts":{"start":"node --env-file-if-exists=.env server.js","test":"node --test"},"engines":{"node":">=22"}}
+{
+  "name": "marasu-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "build": "node scripts/build.js",
+    "check": "node scripts/check.js",
+    "test": "node --test test/*.test.js",
+    "deploy": "npm run check && npm test && firebase deploy --project portfolio-marasu",
+    "deploy:hosting": "npm run build && firebase deploy --only hosting --project portfolio-marasu"
+  },
+  "engines": { "node": ">=22" }
+}

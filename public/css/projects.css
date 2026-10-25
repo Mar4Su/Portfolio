@@ -5,7 +5,7 @@
 .project-slider { overflow:hidden; }
 .project-card { min-width:0; }
 .project-open { display:block; width:100%; height:auto; padding:0; margin:0; border:0; background:transparent; text-align:left; text-transform:none; letter-spacing:normal; line-height:normal; white-space:normal; color:inherit; }
-.project-open:hover,.project-open:focus-visible { background:transparent; }
+.project-open:hover,.project-open:focus,.project-open:active { background:transparent; border-color:transparent; color:inherit; }
 .project-open:focus-visible { outline:2px solid var(--color-1); outline-offset:-2px; }
 .project-image { display:block; width:100%; aspect-ratio:16/10; object-fit:cover; background:#202024; transition:filter .2s; }
 .project-open:hover .project-image { filter:brightness(1.12); }

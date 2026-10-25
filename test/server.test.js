@@ -48,7 +48,7 @@ test('authenticated project lifecycle, feature limit, host isolation and persist
         const input={name:'New project',category:'Website',description:'A test project',url:'https://example.com',featured:true,photo};
         assert.equal((await request('/api/projects','POST',input)).status,409);
         assert.equal((await request('/api/projects/'+projects[0].id,'PUT',{...projects[0],featured:false})).status,200);
-        const create=await request('/api/projects','POST',input); assert.equal(create.status,200);
+        const create=await request('/api/projects','POST',input); assert.equal(create.status,201);
         const added=await create.json();
         assert.equal((await request(added.image,'GET',undefined,false)).status,200);
         assert.equal((await request('/api/projects/'+added.id,'PUT',{...added,url:'javascript:alert(1)'})).status,400);

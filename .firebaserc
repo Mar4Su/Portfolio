@@ -1,0 +1,7 @@
+{
+  "projects": { "default": "portfolio-marasu" },
+  "targets": { "portfolio-marasu": { "hosting": {
+    "portfolio": ["portfolio-marasu"],
+    "admin": ["portfolio-marasu-admin"]
+  } } }
+}
